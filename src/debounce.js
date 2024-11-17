@@ -1,21 +1,17 @@
-// useDebounce.js
-import { useState, useEffect } from "react";
+// debounce.js
 
-// Hook de debounce personalizado
-function useDebounce(value, delay) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
+export function debounce(func, delay) {
+  let timeoutId;
 
-  useEffect(() => {
-    // Establecer un temporizador para actualizar el valor debounced después del retraso
-    const timer = setTimeout(() => {
-      setDebouncedValue(value);
+  return function (...args) {
+    // Cancelar el timeout anterior si existe
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    // Crear un nuevo timeout
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
     }, delay);
-
-    // Limpiar el temporizador si el valor cambia antes de que se complete el retraso
-    return () => clearTimeout(timer);
-  }, [value, delay]);
-
-  return debouncedValue;
+  };
 }
-
-export default useDebounce;
